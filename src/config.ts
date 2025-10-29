@@ -9,11 +9,11 @@ import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
 	title: "fazhehy's blog",
-	subtitle: "Demo Site",
+	subtitle: "",
 	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
 		hue: 250, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
-		fixed: false, // Hide the theme color picker for visitors
+		fixed: true, // Hide the theme color picker for visitors
 	},
 	banner: {
 		enable: true,
@@ -44,11 +44,11 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.Home,
 		LinkPreset.Archive,
 		LinkPreset.About,
-		{
-			name: "GitHub",
-			url: "https://github.com/fazhehy", // Internal links should not include the base path, as it is automatically added
-			external: true, // Show an external link icon and will open in a new tab
-		},
+		// {
+		// 	name: "GitHub",
+		// 	url: "https://github.com/fazhehy", // Internal links should not include the base path, as it is automatically added
+		// 	external: true, // Show an external link icon and will open in a new tab
+		// },
 	],
 };
 
@@ -64,11 +64,11 @@ export const profileConfig: ProfileConfig = {
 			// `pnpm add @iconify-json/<icon-set-name>`
 			url: "https://www.bilibili.com/",
 		},
-		{
-			name: "email",
-			icon: "ic:baseline-email",
-			url: "https://store.steampowered.com",
-		},
+		// {
+		// 	name: "email",
+		// 	icon: "ic:baseline-email",
+		// 	url: "https://store.steampowered.com",
+		// },
 		{
 			name: "GitHub",
 			icon: "fa6-brands:github",
