@@ -19,7 +19,7 @@ lang: ''
 
 $\phi_1$和$\phi_2$如下图所示
 
-![](./images/1.png)
+![pictures](./images/1.png)
 
 将两个相位做差,可以得到${\phi}'$,为了使${\phi}'\in [0, 2\pi]$
 
@@ -47,7 +47,7 @@ $$
 
 得到的${\phi}'$如下图
 
-![](./images/2.png)
+![pictures](./images/2.png)
 
 在同一$\lambda$处有以下等式
 
@@ -80,7 +80,7 @@ $$
 然而我们得到无歧义的相位之后尽量还是使用原始数据
 现在问题转换成怎么通过无歧义的相位$\phi'$找到原始数据(一般取高频)的n(也可以称为阶数)
 
-![](./images/3.png)
+![pictures](./images/3.png)
 
 由上面的等式,可以推导出
 
@@ -174,7 +174,7 @@ visualize_patterns_curve([phase1, phase2, phase3])
 
 
     
-![png](./images/main_4_1.png)
+![pictures](./images/main_4_1.png)
     
 
 
@@ -207,7 +207,7 @@ visualize_patterns_curve([phase1, phase2, phase4])
 
 
     
-![png](./images/main_5_1.png)
+![pictures](./images/main_5_1.png)
     
 
 
@@ -218,7 +218,7 @@ visualize_patterns_curve([phase3, phase4])
 
 
     
-![png](./images/main_6_0.png)
+![pictures](./images/main_6_0.png)
     
 
 
@@ -230,7 +230,7 @@ visualize_patterns_curve([phase3_, phase4])
 
 
     
-![png](./images/main_7_0.png)
+![pictures](./images/main_7_0.png)
     
 
 
@@ -242,7 +242,7 @@ visualize_patterns_curve([phase3_, phase4, phase_n])
 
 
     
-![png](./images/main_8_0.png)
+![pictures](./images/main_8_0.png)
     
 
 
@@ -251,4 +251,4 @@ phase = phase4 + np.round(phase_n/(2*np.pi))*2*np.pi
 visualize_patterns_curve([phase])
 ```
     
-![png](./images/main_9_0.png)
+![pictures](./images/main_9_0.png)
