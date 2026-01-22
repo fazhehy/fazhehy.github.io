@@ -55,7 +55,7 @@ export const navBarConfig: NavBarConfig = {
 export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/92575132.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 	name: "fazhehy",
-	bio: "welcome to my blog",
+	bio: "welcome to my blog, have a nice day! (^.^) my email: fazhehy@qq.com",
 	links: [
 		{
 			name: "bilibili",
@@ -67,7 +67,7 @@ export const profileConfig: ProfileConfig = {
 		// {
 		// 	name: "email",
 		// 	icon: "ic:baseline-email",
-		// 	url: "https://store.steampowered.com",
+		// 	url: "mailto:fazhehy@qq.com",
 		// },
 		{
 			name: "GitHub",
