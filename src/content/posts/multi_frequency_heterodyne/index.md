@@ -155,7 +155,7 @@ cycles2 = 4  # 第二个频率周期数
 num_points = 1000
 
 period1 = num_points / cycles1
-period2 = num_points / cycles2main_files
+period2 = num_points / cycles2
 
 phase1 = generate_phase(cycles1, num_points=num_points)
 phase2 = generate_phase(cycles2, num_points=num_points)
@@ -174,7 +174,7 @@ visualize_patterns_curve([phase1, phase2, phase3])
 
 
     
-![png](main_files/main_4_1.png)
+![png](./images/main_4_1.png)
     
 
 
@@ -207,7 +207,7 @@ visualize_patterns_curve([phase1, phase2, phase4])
 
 
     
-![png](main_files/main_5_1.png)
+![png](./images/main_5_1.png)
     
 
 
@@ -218,7 +218,7 @@ visualize_patterns_curve([phase3, phase4])
 
 
     
-![png](main_files/main_6_0.png)
+![png](./images/main_6_0.png)
     
 
 
@@ -230,7 +230,7 @@ visualize_patterns_curve([phase3_, phase4])
 
 
     
-![png](main_files/main_7_0.png)
+![png](./images/main_7_0.png)
     
 
 
@@ -242,7 +242,7 @@ visualize_patterns_curve([phase3_, phase4, phase_n])
 
 
     
-![png](main_files/main_8_0.png)
+![png](./images/main_8_0.png)
     
 
 
@@ -251,4 +251,4 @@ phase = phase4 + np.round(phase_n/(2*np.pi))*2*np.pi
 visualize_patterns_curve([phase])
 ```
     
-![png](main_files/main_9_0.png)
+![png](./images/main_9_0.png)
