@@ -1,5 +1,5 @@
 ---
-title: 多频外差法
+title: 条纹投影——多频外差法
 published: 2026-01-22
 description: '多频外差消除相位歧义'
 image: ''

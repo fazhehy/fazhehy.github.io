@@ -1,7 +1,7 @@
 ---
-title: 相移法公式推导
+title: 条纹投影——相移法
 published: 2026-01-20
-description: ''
+description: '相移法公式推导'
 image: ''
 tags: [FPP, phase_unwrapping]
 category: 'FPP'
