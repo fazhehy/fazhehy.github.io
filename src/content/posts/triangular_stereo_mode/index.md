@@ -1,7 +1,7 @@
 ---
 title: 条纹投影——逆相机法
 published: 2026-01-27
-description: ''
+description: '逆相机法标定'
 image: ''
 tags: [FPP, calibration, triangular_stereo]
 category: 'FPP'
