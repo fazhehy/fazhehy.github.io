@@ -581,7 +581,7 @@ visualize_patterns_3d(unwrapped_phase, elev=30, azim=-90)
 
 
     
-![pi c]/main_21_0.png)
+![pictures](./images/main_21_0.png)
     
 
 
