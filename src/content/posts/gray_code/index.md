@@ -1,7 +1,7 @@
 ---
 title: 条纹投影——格雷码法
 published: 2026-01-25
-description: '格雷码法消除相位歧义'
+description: '格雷码法(包括互补格雷码)消除相位歧义'
 image: ''
 tags: [FPP, gray_code]
 category: 'FPP'
