@@ -5,7 +5,7 @@ description: '格雷码法(包括互补格雷码)消除相位歧义'
 image: ''
 tags: [FPP, gray_code]
 category: 'FPP'
-draft: false 
+draft: true 
 lang: ''
 ---
 ## 格雷码法
@@ -570,9 +570,11 @@ visualize_patterns_curve([phase_unwrapped_filtered[height//2, :]], title='中间
     
 
 
-### 互补格雷码
+### ~~互补格雷码~~
 
-经典格雷码方法,由于投影仪离焦或者其他原因(光学传递函数可视为一个低通滤波器,阶跃响应会被平滑),格雷码的边缘会变得模糊,如下图
+以下内容有问题.待更改!!!!
+
+~~经典格雷码方法,由于投影仪离焦或者其他原因(光学传递函数可视为一个低通滤波器,阶跃响应会被平滑),格雷码的边缘会变得模糊,如下图~~
 
 ![](./images/格雷码离焦误差.png)
 
