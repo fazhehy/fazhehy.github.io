@@ -4,14 +4,14 @@ published: 2025-10-29
 description: '余弦矩阵表达姿态，四元数表示姿态，Mahony解算'
 image: ''
 tags: [IMU]
-category: 'Embedded'
+category: '组合导航'
 lang: 'zh_CN'
 ---
-## 姿态表达
+# 姿态表达
 
-### 方向余弦矩阵
+## 方向余弦矩阵
 
-#### 矩阵推导
+### 矩阵推导
 
 ​	向量$\vec{v}$分别绕$x, y, z$轴旋转$\varphi, \theta, \psi$角，我们可以推出旋转前与旋转后的坐标关系。
 
@@ -27,7 +27,7 @@ $$
 x' &= x \\ \\
 y' &= v_{1}\cos(\alpha + \varphi) = v_{1}\cos\alpha \cos\varphi -v_{1}\sin\alpha \sin \varphi  \\
 &= y\cos\varphi-z\sin\varphi \\ \\
-z' &= v_{1}\sin(\alpha + \varphi) = v_{1}\sin \cos\varphi+v_{1}\cos\alpha\sin \varphi  \\
+z' &= v_{1}\sin(\alpha + \varphi) = v_{1}\sin\alpha \cos\varphi+v_{1}\cos\alpha\sin \varphi  \\
 &= z\cos\varphi+y\sin\varphi 
 \end{align*}
 $$
@@ -187,24 +187,24 @@ I &= \begin{bmatrix}
 \end{align*}
 $$
 
-#### 万向死锁
+### 万向死锁
 
 ​	当$\theta = 90\degree$时，$x$轴和$z$轴会重合，此时就缺少一个维度的旋转。
 
  1. 代数解释
 
-    当$\theta = 90\degree$时， $\cos\theta = 0, \sin\theta = 1$.
+    当$\theta = 90\degree$时， $\cos\theta = 0, \sin\theta = 1$。
     $$
     \begin{align*}
     {R^e_b} &= \begin{bmatrix}
      0 & \cos\varphi\sin\psi+\sin\varphi\cos\psi & \sin\varphi\sin\psi-\cos\varphi\cos\psi \\
-     0 & \cos\varphi\cos\psi-\sin\varphi \sin\psi & \sin \varphi\cos\psi+\cos\varphi0\sin\psi\\
-     1 & 0 & 0
+     0 & \cos\varphi\cos\psi-\sin\varphi \sin\psi & \sin \varphi\cos\psi+\cos\varphi\sin\psi\\
+     -1 & 0 & 0
     \end{bmatrix}\\\\
     &= \begin{bmatrix}
      0 & \sin(\varphi+\psi) & -\cos(\varphi+\psi) \\
      0 & \cos(\varphi+\psi)  & \sin(\varphi+\psi)\\
-     1 & 0 & 0
+     -1 & 0 & 0
     \end{bmatrix}
     \end{align*}
     $$
@@ -216,7 +216,7 @@ $$
 
 ​	由上图可知，绕$y$轴旋转$90\degree$后，$z$轴就旋转到了原本$x$轴的位置，此时再绕$z$轴旋转，就跟绕$x$轴旋转的效果一致。对$z$轴分量并无贡献，所以此时旋转就少了一个自由度。正是因为万向死锁，姿态解算并不会用欧拉角表示，而是会用四元数来表示，尽管欧拉角直观。
 
-### 罗德里格旋转公式（Rodriguez Rotation formula）
+## 罗德里格旋转公式（Rodriguez Rotation formula）
 
 ​	如图，向量$\vec{v}$绕旋转轴$k$轴旋转$\theta$角得到$\vec{v}'$，旋转轴的单位向量是$\vec{k}$。那么$\vec{v}'$与$\vec{v}$,$\theta$,$\vec{k}$有什么关系呢？下面来进行推导。
 
@@ -314,14 +314,14 @@ $$
 故而
 $$
 \begin{align*}
- 		R_b^e &=I-(1-\cos\theta)K^2+\sin\theta K\\\\
+ 		R_b^e &=I+(1-\cos\theta)K^2+\sin\theta K\\\\
 \end{align*}
 $$
 
 
-### 四元数
+## 四元数
 
-#### 定义
+### 定义
 
 $$
 \begin{align*}
@@ -362,7 +362,7 @@ $$
 
 对于单位四元数：$q^{-1} = q^*$
 
-#### 四元数乘法
+### 四元数乘法
 
 令
 $$
@@ -383,12 +383,12 @@ q_0q_1 &= (w_0+x_0\boldsymbol{i}+y_0\boldsymbol{j}+z_0\boldsymbol{k})(w_1+x_1\bo
 	 &\quad \ w_1z_0\boldsymbol{k} + x_1z_0\boldsymbol{j}- y_1z_0\boldsymbol{i} - z_0z_1 + \\\\
 	 & = w_0w_1- x_0x_1- y_0y_1 - z_0z_1 + \\\\
 	 &\quad \ w_0(x_1\boldsymbol{i}+y_1\boldsymbol{j}+z_1\boldsymbol{k}) + w_1(x_0\boldsymbol{i}+y_0\boldsymbol{j}+z_0\boldsymbol{k}) + \\\\
-	 &\quad \  (y_0z_1-y_1z_0)\boldsymbol{i} + (x_1z_0-x_0z_1)\boldsymbol{j}+ (x_0y_1-x_1y_0)\boldsymbol{i} \\\\
+	 &\quad \  (y_0z_1-y_1z_0)\boldsymbol{i} + (x_1z_0-x_0z_1)\boldsymbol{j}+ (x_0y_1-x_1y_0)\boldsymbol{k} \\\\
 	 &= \underline{\textcolor{red}{w_0w_1-\vec{r_0}\cdot\vec{r_1} + w_0\vec{r_1} + w_1\vec{r_0} + \vec{r_0}\times\vec{r_1}}}
 \end{align*}
 $$
 
-#### 四元数如何表达旋转
+### 四元数如何表达旋转
 
 $\vec{v}$绕旋转轴$\vec{k}$旋转$\theta$角得到向量$\vec{v}'$
 
@@ -423,7 +423,7 @@ $$
 \vec{v}'=q\vec{v}q^{-1}=q\vec{v}q^*
 $$
 
-#### 四元数和方向余弦矩阵的联系
+### 四元数和方向余弦矩阵的联系
 
 由于$q=\cos\frac{\theta}{2}+\vec{k}\sin\frac{\theta}{2}$，则有
 
@@ -440,7 +440,7 @@ $$
 则
 $$
 \begin{align*}
-R_b^e &=I-(1-\cos\theta)K^2+\sin\theta K\\\\
+R_b^e &=I+(1-\cos\theta)K^2+\sin\theta K\\\\
  			&=  \begin{bmatrix}1 & 0 & 0 \\0 & 1  & 0\\0 & 0 & 1 \end{bmatrix}+ (1-\cos\theta)\begin{bmatrix}0 & -k_z & k_y \\k_z & 0  & -k_x\\-k_y &  k_x & 0\end{bmatrix}\cdot\begin{bmatrix}0 & -k_z & k_y \\k_z & 0  & -k_x\\-k_y &  k_x & 0\end{bmatrix} + \\\\ & \quad \  \sin\theta\begin{bmatrix}0 & -k_z & k_y \\k_z & 0  & -k_x\\-k_y &  k_x & 0\end{bmatrix} \\\\
  			&= \begin{bmatrix}1 & 0 & 0 \\0 & 1  & 0\\0 & 0 & 1 \end{bmatrix}+2 \sin^2\frac{\theta}{2}\begin{bmatrix}-k_z^2-k_y^2 & k_xk_y & k_xk_z \\k_xk_y & -k_x^2-k_z^2  &  k_yk_z\\k_xk_z &  k_yk_z & -k_x^2-k_y^2\end{bmatrix} + 
  			\\\\ & \quad \ 2\sin\frac{\theta}{2}\cos\frac{\theta}{2}\begin{bmatrix}0 & -k_z & k_y \\k_z & 0  & -k_x\\-k_y &  k_x & 0\end{bmatrix} \\\\ 
@@ -493,7 +493,7 @@ R_e^b &=
 \end{align*}
 $$
 
-## 姿态更新
+# 姿态更新
 
 在极小时间$\mathrm{d}t \to 0$里面，$q_{t+\mathrm{d}t}=q_{t}+\dot{q}\mathrm{d}t$，
 
@@ -607,7 +607,7 @@ $$
 $$
 所以我们能够根据上式来更新四元数，从而更新姿态。
 
-## Mahony算法
+# Mahony算法
 
 1. 通过加速度分量计算初始四元数；
 
@@ -653,7 +653,7 @@ $$
    \begin{bmatrix}a_x'\\a_y'\\a_z'\end{bmatrix} &= R_e^b\cdot\begin{bmatrix}0\\0\\1\end{bmatrix}\\\\
    &=
     \begin{bmatrix}1-2(q_2^2+q_3^2) & 2q_1q_2+2q_0q_3 & 2q_1q_3-2q_0q_2 \\2q_1q_2-2q_0q_3 & 1-2(q_1^2+q_3^2)  & 2q_2q_3+2q_0q_1\\2q_1q_3+2q_0q_2 & 2q_2q_3-2q_0q_1 & 1-2(q_1^2+q_2^2) \end{bmatrix}	\cdot\begin{bmatrix}0\\0\\1\end{bmatrix} \\\\
-    &= \begin{bmatrix}2q_1q_2-2q_0q_3\\2q_2q_3+2q_0q_1\\1-2(q_1^2+q_2^2)\end{bmatrix} =\begin{bmatrix}2q_1q_2-2q_0q_3\\2q_2q_3+2q_0q_1\\2q_0^2+2q_1^2+2q_2^2+2q_3^2-2(q_1^2+q_2^2)-1\end{bmatrix} = \begin{bmatrix}2q_1q_2-2q_0q_3\\2q_2q_3+2q_0q_1\\2q_0^2+2q_3^2-1\end{bmatrix}
+    &= \begin{bmatrix}2q_1q_3-2q_0q_2\\2q_2q_3+2q_0q_1\\1-2(q_1^2+q_2^2)\end{bmatrix} =\begin{bmatrix}2q_1q_3-2q_0q_2\\2q_2q_3+2q_0q_1\\2q_0^2+2q_1^2+2q_2^2+2q_3^2-2(q_1^2+q_2^2)-1\end{bmatrix} = \begin{bmatrix}2q_1q_3-2q_0q_2\\2q_2q_3+2q_0q_1\\2q_0^2+2q_3^2-1\end{bmatrix}
    \end{align*}
    $$
 
@@ -699,7 +699,9 @@ $$
 7. 通过补偿后的角速度更新四元数；
    $$
    \begin{align*}
-   \begin{bmatrix}{q_0}_{t+\mathrm{d}t} \\ {q_1}_{t+\mathrm{d}t} \\ {q_2}_{t+\mathrm{d}t}\\ {q_3}_{t+\mathrm{d}t}\\ \end{bmatrix} = \frac{1}{2}\begin{bmatrix}0 & -g''_x & -g''_y & -g''_z \\g''_x & 0 & g''_z & -g''_y \\g''_y & -g''_z & 0 & g''_x \\g''_z & g''_y & -g''_x & 0 \end{bmatrix} \cdot
+   \begin{bmatrix}{q_0}_{t+\mathrm{d}t} \\ {q_1}_{t+\mathrm{d}t} \\ {q_2}_{t+\mathrm{d}t}\\ {q_3}_{t+\mathrm{d}t}\\ \end{bmatrix} =
+   \begin{bmatrix}{q_0}_t \\ {q_1}_t \\ {q_2}_t\\ {q_3}_t\\ \end{bmatrix} +
+   \frac{\mathrm{d}t}{2}\begin{bmatrix}0 & -g''_x & -g''_y & -g''_z \\g''_x & 0 & g''_z & -g''_y \\g''_y & -g''_z & 0 & g''_x \\g''_z & g''_y & -g''_x & 0 \end{bmatrix} \cdot
    \begin{bmatrix}{q_0}_t \\ {q_1}_t \\ {q_2}_t\\ {q_3}_t\\ \end{bmatrix} 
    \end{align*}
    $$

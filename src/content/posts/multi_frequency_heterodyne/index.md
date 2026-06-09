@@ -9,10 +9,8 @@ draft: false
 lang: ''
 ---
 
-## 多频外差法
-
-### 数学原理推导
-
+# 多频外差法
+## 原理推导
 现有两个歧义相位$\phi_1$和$\phi_2$
 
 分别设频率为$f_1,f_2(f_1>f_2)$,波长$\lambda_1,\lambda_2(\lambda_1<\lambda_2)$
@@ -75,14 +73,13 @@ f' &= f_1 - f_2
 \end{align*}
 $$
 
-要想得到无歧义的相位,就要保证$\lambda'>W$
+要想得到无歧义的相位，就要保证$\lambda'>W$
 
-如果是用一幅图中有多少个周期来生成条纹的话,只需要满足最后计算的周期数小于或者等于1.
+如果是用一幅图中有多少个周期来生成条纹的话，只需要满足最后计算的周期数小于或者等于1。
 
-例如使用三频外差,可以使用61,70,80.
-因为61+80-2*70=1.
-方便的是,无论你的图像宽度是多少,都可以用这几个值.
-
+例如使用三频外差，可以使用61，70，80。
+因为$$61+80-2\times70=1$$
+方便的是，无论你的图像宽度是多少，都可以用这几个值。
 然而我们得到无歧义的相位之后尽量还是使用原始数据
 现在问题转换成怎么通过无歧义的相位$\phi'$找到原始数据(一般取高频)的n(也可以称为阶数)
 
@@ -112,149 +109,34 @@ $$
 \varphi_1 = \phi_1 + 2\pi \text{Round}(\frac{\frac{f_1}{f'}\phi'-\phi_1}{2\pi})
 $$
 
-- $\text{Round}(*)$是向下取整函数,除$2\pi$是为了换算到整数
+- $\text{Round}(*)$是四舍五入函数,除$2\pi$是为了换算到整数
 
 ### 代码验证
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from typing import List
-import warnings
-warnings.filterwarnings('ignore')
+> 代码仓库：https://github.com/fazhehy/fpp
+
+``` python
+import sys
+from pathlib import Path
+
+p = Path.cwd().resolve().parent
+sys.path.append(str(p))
+
+from src.fpp import *
+from src.utils import *
+
+width, height = 2716, 1600
+
+# 多频外差法解包裹相位
+cycles_list = [36, 55, 75]
+unwrapped_phase, modulation, average = decode_multiple_cycles_patterns(
+    "../images/multiple_cycles/", n_steps=12, cycles_list=cycles_list)
+
+show_image(unwrapped_phase, "unwrapped_phase")
+show_image(modulation, "modulation")
+show_image(average, "average")
 ```
 
-
-```python
-# 生成歧义相位数据
-def generate_phase(cycles: float, num_points: int = 1000) -> np.ndarray:
-    phase = np.linspace(0, cycles * 2 * np.pi, num_points, endpoint=False)
-    phase = (phase + np.pi) % (2 * np.pi) - np.pi
-    return phase
-```
-
-
-```python
-# 显示相位数据
-def visualize_patterns_curve(data: List[np.ndarray], labels: List[str] = None, title: str = None):
-    # 绘制这行数据
-    plt.figure(figsize=(8, 4))
-    for idx, series in enumerate(data):
-        label = labels[idx] if labels and idx < len(labels) else f'Signal {idx+1}'
-        plt.plot(series, label=label)
-    if title:
-        plt.title(title)
-    plt.xlabel('Column Index')
-    plt.ylabel('Value')
-    plt.legend()
-    plt.grid(True)
-    plt.show()
-```
-
-
-```python
-# 合成相位等于图像宽度
-
-cycles1 = 3  # 第一个频率周期数
-cycles2 = 4  # 第二个频率周期数
-
-num_points = 1000
-
-period1 = num_points / cycles1
-period2 = num_points / cycles2
-
-phase1 = generate_phase(cycles1, num_points=num_points)
-phase2 = generate_phase(cycles2, num_points=num_points)
-
-phase3 = np.where(phase2 >= phase1, phase2-phase1, phase2 - phase1 + 2 * np.pi)
-
-period3 = (period1 * period2) / abs(period1 - period2)
-
-print(f"Period 1: {period1}, Period 2: {period2}, Combined Period: {period3}")
-
-visualize_patterns_curve([phase1, phase2, phase3])
-```
-
-    Period 1: 333.3333333333333, Period 2: 250.0, Combined Period: 1000.0000000000001
-
-
-
-    
-![pictures](./images/main_4_1.png)
-    
-
-
-
-```python
-# 合成相位小于图像宽度
-
-cycles1 = 12  # 第一个频率周期数
-cycles2 = 16  # 第二个频率周期数
-
-num_points = 1000
-
-period1 = num_points / cycles1
-period2 = num_points / cycles2
-
-phase1 = generate_phase(cycles1, num_points=num_points)
-phase2 = generate_phase(cycles2, num_points=num_points)
-
-phase4 = np.where(phase2 >= phase1, phase2-phase1, phase2 - phase1 + 2 * np.pi)
-
-period4 = (period1 * period2) / abs(period1 - period2)
-
-print(f"Period 1: {period1}, Period 2: {period2}, Combined Period: {period4}")
-
-visualize_patterns_curve([phase1, phase2, phase4])
-```
-
-    Period 1: 83.33333333333333, Period 2: 62.5, Combined Period: 250.00000000000003
-
-
-
-    
-![pictures](./images/main_5_1.png)
-    
-
-
-
-```python
-visualize_patterns_curve([phase3, phase4])
-```
-
-
-    
-![pictures](./images/main_6_0.png)
-    
-
-
-
-```python
-phase3_ = period3*phase3/period4
-visualize_patterns_curve([phase3_, phase4])
-```
-
-
-    
-![pictures](./images/main_7_0.png)
-    
-
-
-
-```python
-phase_n = phase3_ - phase4
-visualize_patterns_curve([phase3_, phase4, phase_n])
-```
-
-
-    
-![pictures](./images/main_8_0.png)
-    
-
-
-```python
-phase = phase4 + np.round(phase_n/(2*np.pi))*2*np.pi
-visualize_patterns_curve([phase])
-```
-    
-![pictures](./images/main_9_0.png)
+![pictures](./images/4.png)
+![pictures](./images/5.png)
+![pictures](./images/6.png)
