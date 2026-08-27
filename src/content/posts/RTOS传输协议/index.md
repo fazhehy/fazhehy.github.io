@@ -1,7 +1,7 @@
 ---
 title: RTOS传输协议
 published: 2026-08-27
-description: '创建STM32H747 vscode工程'
+description: ''
 image: ''
 tags: [embedded, stm32, esp32]
 category: 'embedded'
