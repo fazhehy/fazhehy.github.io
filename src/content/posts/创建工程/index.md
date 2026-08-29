@@ -73,7 +73,8 @@ void log_output(const char* file, uint16_t line, const char* str, ...)
     va_start(arg, str);
     vsnprintf(loc_buf, sizeof(loc_buf), str, arg);
     va_end(arg);
-    // snprintf(log_buf, LOG_BUF_LEN, "[=LOG=]: %s (at %s:%d)\r\n", loc_buf, file, line);
+    (void)file;
+    (void)line;
     snprintf(log_buf, LOG_BUF_LEN, "[=LOG=]: %s\r\n", loc_buf);
     LOG_PRINT(log_buf, strlen(log_buf));
 }
@@ -85,7 +86,8 @@ void log_error_output(const char* file, uint16_t line, const char* str, ...)
     va_start(arg, str);
     vsnprintf(loc_buf, sizeof(loc_buf), str, arg);
     va_end(arg);
-    // snprintf(log_buf, LOG_BUF_LEN, "[ERROR]: %s (at %s:%d)\r\n", loc_buf, file, line);
+    (void)file;
+    (void)line;
     snprintf(log_buf, LOG_BUF_LEN, "[ERROR]: %s\r\n", loc_buf);
     LOG_PRINT(log_buf, strlen(log_buf));
 }
@@ -107,7 +109,6 @@ void log_vofa_justfloat_output(const float* data, uint8_t count)
 }
 
 #endif /* USE_LOG */
-
 ```
 log.h
 ```c
@@ -127,25 +128,17 @@ extern "C" {
 #include "stm32h7xx_hal.h"
 #include "usart.h"
 
-/* ===================== 用户配置 ===================== */
-
 #define USE_LOG (1)
 #define LOG_BUF_LEN (256)
 #define LOG_UART_HANDLE huart1
 
-/* ===================== 内部宏 ======================== */
-
 #define LOG_UART_TIMEOUT_MS 100U
 #define LOG_PRINT(str, len) HAL_UART_Transmit(&LOG_UART_HANDLE, (uint8_t*)(str), (len), LOG_UART_TIMEOUT_MS)
-
-/* ===================== API ========================== */
 
 void log_output(const char* file, uint16_t line, const char* str, ...);
 void log_error_output(const char* file, uint16_t line, const char* str, ...);
 void log_printf_output(const char* str, ...);
 void log_vofa_justfloat_output(const float* data, uint8_t count);
-
-/* ===================== 用户宏 ======================== */
 
 #if USE_LOG
     #define log_info(str, ...) (log_output(__FILE__, __LINE__, str, ##__VA_ARGS__))
@@ -164,18 +157,10 @@ void log_vofa_justfloat_output(const float* data, uint8_t count);
 #endif
 
 #endif /* __LOG_H */
-
 ```
 
 delay.c
 ```c
-/**
- ******************************************************************************
- * @file    delay.c
- * @brief   Common delay and tick helper functions.
- ******************************************************************************
- */
-
 #include "delay.h"
 #include <stdbool.h>
 
@@ -216,16 +201,10 @@ uint32_t delay_get_tick(void)
 {
     return HAL_GetTick();
 }
+
 ```
 delay.h
 ```c
-/**
- ******************************************************************************
- * @file    delay.h
- * @brief   Common delay and tick helper functions.
- ******************************************************************************
- */
-
 #ifndef __DELAY_H
 #define __DELAY_H
 
@@ -298,4 +277,4 @@ echo "完成"
 
 工具链位置可能要更改一下.
 
-工程模板[链接](https://github.com/fazhehy/STM32H747)
+工程模板[链接](https://github.com/fazhehy/STM32-HAL-Drivers/tree/main/STM32H747/template)
