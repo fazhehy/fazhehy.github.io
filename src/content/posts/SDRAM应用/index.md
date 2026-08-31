@@ -1,7 +1,7 @@
 ---
 title: STM32H747学习笔记--SDRAM驱动
-published: 2026-06-27
-description: 'STM32H747使用sdram(IS42S32800J)'
+published: 2026-09-01
+description: 'STM32H747 sdram(IS42S32800J)实验'
 image: ''
 tags: [embedded, stm32]
 category: 'embedded'
@@ -119,7 +119,7 @@ CubeMX 中配置 FMC 连接 SDRAM 的主要步骤: 使能 FMC 外设 -> 选择 S
 | 配置项           | 选择   | 说明                                                                   |
 | ---------------- | ------ | ---------------------------------------------------------------------- |
 | SDRAM Controller | SDRAM1 | 控制信号在 FMC1 的引脚范围, 见上方判断方法                             |
-| Bank             | Bank1  | 根据原理图中 SDNE 引脚决定, SDNE0 (PG9) 为 Bank1, SDNE1 (PH7) 为 Bank2 |
+| Bank             | Bank2  | 根据原理图中 SDNE 引脚决定, SDNE0 (PG9) 为 Bank1, SDNE1 (PH7) 为 Bank2 |
 | SDCKE0           | 勾选   | 时钟使能信号, 必须勾选; IS42S32800J 有 CKE 引脚                        |
 
 **2. Internal bank number**
@@ -507,4 +507,4 @@ void cm7_main()
 }
 ```
 
-工程模板[链接](https://github.com/fazhehy/STM32H747)
+[工程链接](https://github.com/fazhehy/STM32-HAL-Drivers/tree/main/STM32H747/sdram)
