@@ -61,13 +61,13 @@ LP-00、LP-01、LP-10、LP-11
 
 HS 模式用于传输图像数据，单条 Data Lane 的速率通常可达数百 `Mbit/s`，更高版本的 D-PHY 还可以达到数 `Gbit/s`。此时 Data Lane 使用低摆幅差分信号，Clock Lane 提供高速同步时钟。配置多条 Data Lane 后，它们可以同时传输，以提高总带宽。
 
-| 项目    | LP 模式          | HS 模式               |
-| ----- | -------------- | ------------------- |
-| 主要用途  | 命令和寄存器读写       | 图像数据                |
-| 典型速率  | 不超过约 10 Mbit/s | 数百 Mbit/s 至数 Gbit/s |
-| 信号形式  | 单端信号           | 低摆幅差分信号             |
-| 常用数据线 | Data Lane 0    | 所有已配置的 Data Lane    |
-| 高速时钟  | 不需要            | 由 Clock Lane 提供     |
+| 项目       | LP 模式            | HS 模式                 |
+| ---------- | ------------------ | ----------------------- |
+| 主要用途   | 命令和寄存器读写   | 图像数据                |
+| 典型速率   | 不超过约 10 Mbit/s | 数百 Mbit/s 至数 Gbit/s |
+| 信号形式   | 单端信号           | 低摆幅差分信号          |
+| 常用数据线 | Data Lane 0        | 所有已配置的 Data Lane  |
+| 高速时钟   | 不需要             | 由 Clock Lane 提供      |
 
 简单来说：
 
@@ -92,12 +92,12 @@ MIPI DSI 会将命令和像素封装成数据包，主要分为：
 
 常见的 DCS 命令包括：
 
-| 命令     | 作用     |
-| ------:| ------ |
+|   命令 | 作用         |
+| -----: | ------------ |
 | `0x11` | 退出睡眠模式 |
-| `0x29` | 开启显示   |
-| `0x2A` | 设置列地址  |
-| `0x2B` | 设置行地址  |
+| `0x29` | 开启显示     |
+| `0x2A` | 设置列地址   |
+| `0x2B` | 设置行地址   |
 | `0x2C` | 写入像素数据 |
 | `0x3A` | 设置像素格式 |
 
@@ -362,14 +362,14 @@ D-PHY：完成物理传输
 
 屏幕参数如下：
 
-| 参数              | 数值                   |
-| --------------- | --------------------:|
-| 分辨率             | 400 × 712            |
-| 像素格式            | RGB888（24 bit/pixel） |
-| Data Lane       | 1 Lane               |
-| 目标刷新率           | 60 Hz                |
-| HSA / HBP / HFP | 4 / 10 / 6 pixels    |
-| VSA / VBP / VFP | 4 / 8 / 6 lines      |
+| 参数            |                   数值 |
+| --------------- | ---------------------: |
+| 分辨率          |              400 × 712 |
+| 像素格式        | RGB888（24 bit/pixel） |
+| Data Lane       |                 1 Lane |
+| 目标刷新率      |                  60 Hz |
+| HSA / HBP / HFP |      4 / 10 / 6 pixels |
+| VSA / VBP / VFP |        4 / 8 / 6 lines |
 
 总时序和目标像素时钟为：
 
@@ -404,7 +404,7 @@ VSA = 4    VBP = 8     Active Height = 712    VFP = 6
 
 CubeMX 灰色的累计值按“实际周期减 1”生成。例如 HSA 为 4 时，HSync Width 为 3；水平总周期为 420 时，Total Width 为 419。
 
-| 参数                                  | 配置             |
+| 参数                                | 配置           |
 | ----------------------------------- | -------------- |
 | Horizontal Synchronization Polarity | Active Low     |
 | Vertical Synchronization Polarity   | Active Low     |
@@ -506,17 +506,17 @@ TX Escape Clock = 75 ÷ 4 = 18.75 MHz
 
 关键参数如下：
 
-| 参数                             | 配置              |
-| ------------------------------ | --------------- |
+| 参数                             | 配置            |
+| -------------------------------- | --------------- |
 | Display ID（Virtual Channel ID） | 0               |
-| Color Coding                   | RGB888          |
-| Video Mode                     | Burst Mode      |
-| Video Packet Size              | 400 Pixels      |
-| Number of Chunks               | 0               |
-| Null Packet Size               | 0 Bytes         |
-| Frame BTA Acknowledge          | Disable         |
-| VSA / VBP / VFP / VACT         | 4 / 8 / 6 / 712 |
-| HSA / HBP / HLINE              | 16 / 41 / 1732  |
+| Color Coding                     | RGB888          |
+| Video Mode                       | Burst Mode      |
+| Video Packet Size                | 400 Pixels      |
+| Number of Chunks                 | 0               |
+| Null Packet Size                 | 0 Bytes         |
+| Frame BTA Acknowledge            | Disable         |
+| VSA / VBP / VFP / VACT           | 4 / 8 / 6 / 712 |
+| HSA / HBP / HLINE                | 16 / 41 / 1732  |
 
 Burst Mode 将一行有效像素放入一个视频包，并以较高的 DSI Lane 速率发送；剩余行时间用于同步、消隐或链路空闲。这里每行正好发送 400 个 RGB888 像素：
 
@@ -560,13 +560,13 @@ BTA 与 **Frame BTA Acknowledge** 不同：前者允许软件发起读操作，�
 
 这些参数用于等待 D-PHY 完成 HS 与 LP 状态切换，不是显示扫描时序。75 MHz Lane Byte Clock 的一个周期约为 13.33 ns：
 
-| 参数                 | 周期数 | 对应时间   |
-| ------------------ | ---:| ------:|
-| Clock Lane HS → LP | 32  | 427 ns |
-| Clock Lane LP → HS | 40  | 533 ns |
-| Data Lane HS → LP  | 18  | 240 ns |
-| Data Lane LP → HS  | 30  | 400 ns |
-| StopWaitTime       | 0   | 0 ns   |
+| 参数               | 周期数 | 对应时间 |
+| ------------------ | -----: | -------: |
+| Clock Lane HS → LP |     32 |   427 ns |
+| Clock Lane LP → HS |     40 |   533 ns |
+| Data Lane HS → LP  |     18 |   240 ns |
+| Data Lane LP → HS  |     30 |   400 ns |
+| StopWaitTime       |      0 |     0 ns |
 
 初次点屏保留 CubeMX 的这些值，不要随意缩短。若出现偶发的 HS 启动失败，可尝试适当增大 StopWaitTime。
 
@@ -598,42 +598,68 @@ Input Offset  = 源图像每行像素数 - 矩形宽度
 
 CubeMX 设置的只是默认模式。程序可以按操作重新配置 DMA2D：
 
-| 操作       | 模式                             |
-| -------- | ------------------------------ |
-| 同格式复制    | Memory to Memory               |
-| 像素格式转换   | Memory to Memory with PFC      |
-| Alpha 混合 | Memory to Memory with Blending |
+| 操作         | 模式                           |
+| ------------ | ------------------------------ |
+| 同格式复制   | Memory to Memory               |
+| 像素格式转换 | Memory to Memory with PFC      |
+| Alpha 混合   | Memory to Memory with Blending |
 | 纯色填充     | Register to Memory             |
 
 > Cortex-M7 开启 Data Cache 后，CPU 写入 DMA2D 源缓冲区时应在传输前清理对应 Cache；CPU 读取 DMA2D 输出前应使对应 Cache 失效。地址和长度需要按 Cache Line 对齐。
 
-## 6. 引脚配置
+## 6. 双缓冲与屏幕撕裂
+
+使用单缓冲时，LTDC 在读取 Framebuffer 的同时，CPU 或 DMA2D 可能正在修改同一块内存。一帧图像中上半部分和下半部分因此可能来自不同画面，形成水平撕裂。
+
+本工程在 SDRAM 中分配两个 RGB888 Framebuffer，前台缓冲供 LTDC 读取，后台缓冲供 CPU 和 DMA2D 绘制。每个缓冲占用 `854400 byte`，两个缓冲合计约 `1.63 MiB`。
+
+一帧画面绘制完成后，程序将 LTDC 的图层地址指向后台缓冲，再通过垂直消隐重载使新地址生效，最后交换前台和后台缓冲。这样可以避免 LTDC 扫描到尚未绘制完成的画面。
+
+绘图函数默认操作后台缓冲，完成一帧后调用 `kd025egoin001_present()` 显示：
+
+```c
+const uint32_t colors[] = {
+    KD025EGOIN001_COLOR_RED,
+    KD025EGOIN001_COLOR_GREEN,
+    KD025EGOIN001_COLOR_BLUE,
+};
+
+for (uint32_t index = 0; index < sizeof(colors) / sizeof(colors[0]); ++index) {
+    kd025egoin001_clear(colors[index]);
+    kd025egoin001_present();
+    delay_ms(100);
+}
+```
+
+> 如果开启了 Data Cache，切换缓冲前需要清理后台缓冲对应的 Cache，并确保地址和长度满足 Cache Line 对齐要求。
+
+## 7. 引脚配置
 
 在 **System Core → GPIO** 中，将屏幕的电源、偏压控制和复位引脚分配给 Cortex-M7：
 
-| 引脚   | 用途                                  | GPIO 配置                            | 初始电平 |
-| ---- | ----------------------------------- | ---------------------------------- | ---- |
-| PI11 | 屏幕主电源及 IOVCC 使能                     | Output Push-Pull、No Pull、Low Speed | Low  |
-| PI12 | SGM3836A CTRL，用于使能 OLED 偏压并设置 ELVSS | Output Push-Pull、No Pull、Low Speed | Low  |
-| PH5  | 屏幕复位，低电平有效                          | Output Push-Pull、No Pull、Low Speed | Low  |
+| 引脚 | 用途                                          | GPIO 配置                            | 初始电平 |
+| ---- | --------------------------------------------- | ------------------------------------ | -------- |
+| PI11 | 屏幕主电源及 IOVCC 使能                       | Output Push-Pull、No Pull、Low Speed | Low      |
+| PI12 | SGM3836A CTRL，用于使能 OLED 偏压并设置 ELVSS | Output Push-Pull、No Pull、Low Speed | Low      |
+| PH5  | 屏幕复位，低电平有效                          | Output Push-Pull、No Pull、Low Speed | Low      |
 
 三个控制引脚上电时先保持低电平。初始化屏幕时，先拉高 PI11 并等待电源稳定，再对 PH5 执行高—低—高复位；完成 DSI 初始化、退出休眠并打开显示后，最后通过 PI12 使能 OLED 偏压。不要在屏幕逻辑电源尚未稳定时提前打开偏压。
 
 启用 **DSIHOST → Video Mode** 后，CubeMX 会自动占用 DSI 专用差分引脚：
 
-| DSI 信号            | 作用                                            |
-| ----------------- | --------------------------------------------- |
-| DSI_CKP / DSI_CKN | 差分时钟 Lane                                     |
-| DSI_D0P / DSI_D0N | Data Lane 0                                   |
+| DSI 信号          | 作用                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| DSI_CKP / DSI_CKN | 差分时钟 Lane                                                |
+| DSI_D0P / DSI_D0N | Data Lane 0                                                  |
 | DSI_D1P / DSI_D1N | Data Lane 1；本工程配置为 One Data Lane，传输时不使用该 Lane |
 
 DSI 差分引脚由 DSI PHY 驱动，不要再配置成普通 GPIO。实际启用的数据 Lane 数由 **Data and Clock Lanes → Number of Lanes** 决定，本工程保持 **One Data Lane**。
 
-## 7. 完整工程
+## 8. 完整工程
 
 本文不再粘贴初始化和绘图代码。可直接参考完整工程：[STM32H747/screen](https://github.com/fazhehy/STM32-HAL-Drivers/tree/main/STM32H747/screen)。工程中包含 CubeMX 配置、KD025EGOIN001 BSP 驱动、SDRAM Framebuffer、LTDC、DSI Host 和 DMA2D 的初始化及测试程序。
 
-## 8. 预期现象
+## 9. 预期现象
 
 烧录并运行测试程序后，屏幕应显示如下测试图：
 
