@@ -5,7 +5,7 @@ description: 'STM32H747 USB基础、USB外设与CDC虚拟串口配置'
 image: ''
 tags: [embedded, stm32]
 category: 'embedded'
-draft: true
+draft: false
 lang: 'zh-CN'
 ---
 
