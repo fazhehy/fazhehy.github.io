@@ -5,7 +5,7 @@ description: 'TF卡的通信方式、逻辑扇区与FAT文件系统基础'
 image: ''
 tags: [embedded, stm32]
 category: 'embedded'
-draft: false
+draft: true
 lang: 'zh-CN'
 ---
 
@@ -176,3 +176,103 @@ SDMMC_CK = 50 MHz ÷ (2 × ClockDiv)
 | `FS_LOCK` | 2 | 启用文件共享检查，并最多跟踪两个同时打开的文件或目录；它不负责多任务同步。 |
 
 按当前配置，适合先使用 **512 字节扇区的 FAT 格式、短文件名**完成文件读写。若之后需要 exFAT、长文件名或可靠的文件时间，应同时检查相关选项及其依赖的实现。
+
+# 第四部分：TF卡文件读写测试
+
+## 1. 测试环境
+
+测试使用 STM32H747 的 Cortex-M7、SDMMC1 四位总线和一张 TF 卡。卡上需已有 FatFs 当前配置支持的 FAT 文件系统，例如 FAT32；本工程未启用 exFAT，测试程序也不会自动格式化卡。
+
+日志由 USART1 输出，可用串口终端按 **115200、8 位数据位、无校验、1 位停止位**查看。程序运行前，CM7 已完成 SDMMC1 和 FatFs 的初始化。
+
+完整测试工程：[STM32H747/sd_card](https://github.com/fazhehy/STM32-HAL-Drivers/tree/main/STM32H747/sd_card)。
+
+## 2. FatFs文件读写测试代码
+
+测试程序位于 `cm7_main.cpp`。它挂载 TF 卡，在根目录选择一个尚不存在的 `TST00000.TXT`～`TST00999.TXT` 文件名，写入一行文本，然后关闭、重新打开并回读校验。
+
+```cpp
+#include "cm7_main.h"
+
+#include "fatfs.h"
+#include "log.h"
+#include "main.h"
+
+#include <cstdio>
+#include <cstring>
+
+void cm7_main(void)
+{
+    if (retSD != 0U) {
+        log_error("FatFs driver link failed: %u", retSD);
+        Error_Handler();
+    }
+
+    FRESULT result = f_mount(&SDFatFS, SDPath, 1);
+    if (result != FR_OK) {
+        log_error("FatFs mount failed: %d", (int)result);
+        Error_Handler();
+    }
+
+    FIL file;
+    char path[24];
+    bool created = false;
+
+    // 选择不存在的 8.3 文件名，避免覆盖卡上的已有文件。
+    for (unsigned long index = 0; index < 1000UL; ++index) {
+        std::snprintf(path, sizeof(path), "%s/TST%05lu.TXT", SDPath, index);
+        result = f_open(&file, path, FA_CREATE_NEW | FA_WRITE);
+        if (result == FR_OK) {
+            created = true;
+            break;
+        }
+        if (result != FR_EXIST) {
+            log_error("FatFs create failed: %d", (int)result);
+            Error_Handler();
+        }
+    }
+
+    if (!created) {
+        log_error("FatFs test filename exhausted");
+        Error_Handler();
+    }
+
+    static const char test_text[] = "STM32H747 FatFs read/write OK\r\n";
+    UINT written = 0;
+    result = f_write(&file, test_text, sizeof(test_text) - 1U, &written);
+    if (result != FR_OK || written != sizeof(test_text) - 1U) {
+        log_error("FatFs write failed: %d, bytes: %u", (int)result, written);
+        (void)f_close(&file);
+        Error_Handler();
+    }
+
+    result = f_close(&file);
+    if (result != FR_OK) {
+        log_error("FatFs close failed: %d", (int)result);
+        Error_Handler();
+    }
+
+    result = f_open(&file, path, FA_READ);
+    if (result != FR_OK) {
+        log_error("FatFs reopen failed: %d", (int)result);
+        Error_Handler();
+    }
+
+    char read_text[sizeof(test_text)] = {0};
+    UINT read = 0;
+    result = f_read(&file, read_text, sizeof(test_text) - 1U, &read);
+    FRESULT close_result = f_close(&file);
+    if (result != FR_OK || close_result != FR_OK || read != sizeof(test_text) - 1U ||
+        std::memcmp(read_text, test_text, sizeof(test_text) - 1U) != 0) {
+        log_error("FatFs verify failed: read=%d, close=%d, bytes=%u", (int)result, (int)close_result, read);
+        Error_Handler();
+    }
+
+    log_info("FatFs test passed: %s", path);
+
+    for (;;) {
+    }
+}
+```
+
+`FA_CREATE_NEW` 只在文件名尚未使用时创建文件，避免覆盖卡上已有内容。写入后重新打开并逐字节比较，能够检验这次 FatFs 文件写入与读取是否一致。若运行成功，串口会输出 `FatFs test passed` 和所创建的文件路径；也可以取出 TF 卡，在电脑上查看该文本文件。这里展示的是**代码规定的通过条件**，还需要以实际串口日志和卡上的文件确认测试结果。
