@@ -5,7 +5,7 @@ description: 'TF卡的通信方式、逻辑扇区与FAT文件系统基础'
 image: ''
 tags: [embedded, stm32]
 category: 'embedded'
-draft: true
+draft: false
 lang: 'zh-CN'
 ---
 
